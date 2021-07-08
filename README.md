@@ -1,6 +1,6 @@
 # automated CI for testing napari plugins
 
-[![Status](https://github.com/tlambert03/napari-plugin-tests/actions/workflows/test.yml/badge.svg)](https://github.com/tlambert03/napari-plugin-tests/actions/workflows/test.yml)
+[![Test Plugins](https://github.com/tlambert03/napari-plugin-tests/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/tlambert03/napari-plugin-tests/actions/workflows/test.yml)
 
 ## How this works
 
