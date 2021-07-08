@@ -1,0 +1,8 @@
+deps: napari-omero
+conda_channels: ome
+conda_deps: omero-py
+plugins:
+  - name: omero
+    hooks:
+      - napari_get_reader
+      - napari_experimental_provide_dock_widget
