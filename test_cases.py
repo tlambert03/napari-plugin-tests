@@ -1,5 +1,9 @@
 import os
 from pathlib import Path
+from typing import final
+from napari.plugins._plugin_manager import NapariPluginManager
+from napari._qt.widgets.qt_viewer_dock_widget import QDockWidget
+from napari import Viewer
 
 import pytest
 
@@ -11,6 +15,8 @@ def pm():
     from napari.plugins import plugin_manager
 
     plugin_manager.discover()
+    plugin_manager.discover_widgets()
+    plugin_manager.discover_sample_data()
 
     def _provides(plugin_name, hookspec_name):
         plugin = plugin_manager._ensure_plugin(plugin_name)
@@ -23,17 +29,37 @@ def pm():
     return plugin_manager
 
 
-def test_discovery(pm):
+@pytest.fixture
+def test_case():
     # each filename stem in `cases` will be run as an independent tox env
-    case_name = os.getenv("TOX_ENV_NAME")
+    case_name = os.getenv("TOX_ENV_NAME") or os.getenv("TEST_CASE")
     assert case_name
 
     CASE_DIR = Path(__file__).parent / "cases"
     case_file = next(f for f in CASE_DIR.glob("*.[y|ya]ml") if f.stem == case_name)
     assert case_file.exists()
 
-    case = TestCase.from_file(case_file)
-    for plugin in case.plugins:
-        assert plugin.name in pm.plugins
+    return TestCase.from_file(case_file)
+
+
+def test_discovery(test_case, pm):
+    for plugin in test_case.plugins:
+        if plugin.name not in pm.plugins:
+            raise AssertionError(f"plugin name {plugin.name} was not registered")
         for hook in plugin.hooks:
             assert pm.provides(plugin.name, hook)
+
+
+def test_dockwidget_added(test_case: TestCase, pm: NapariPluginManager, qtbot):
+    for plugin in test_case.plugins:
+        if plugin.name in pm._dock_widgets:
+            for widget_name in pm._dock_widgets[plugin.name]:
+                viewer = Viewer(show=False)
+                try:
+                    dw, wdg = viewer.window.add_plugin_dock_widget(
+                        plugin.name, widget_name
+                    )
+                    assert isinstance(dw, QDockWidget)
+                    print(dw)
+                finally:
+                    viewer.close()
