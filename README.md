@@ -3,10 +3,12 @@
 ## How this works
 
 To add a test case for a plugin, open a PR to add a new file
-to the `cases` directory.  Here's an example test case, for
-`napari-omero`, which has a somewhat complicated installation:
+to the [`cases`](cases) directory.  Here's an example test case, for
+`napari-omero`, which has a somewhat complicated installation,
+involving conda dependencies and non-default channels.
 
 ```yaml
+# cases/napari-omero.yml
 deps: napari-omero  # pip dependencies
 conda_channels: ome  # conda channels to use
 conda_deps: omero-py  # deps to install from conda
