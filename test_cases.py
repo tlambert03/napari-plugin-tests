@@ -1,9 +1,9 @@
-import pytest
 import os
-from case import TestCase
 from pathlib import Path
 
-CASE_DIR = Path(__file__).parent / "cases"
+import pytest
+
+from case import TestCase
 
 
 @pytest.fixture
@@ -28,6 +28,7 @@ def test_discovery(pm):
     case_name = os.getenv("TOX_ENV_NAME")
     assert case_name
 
+    CASE_DIR = Path(__file__).parent / "cases"
     case_file = next(f for f in CASE_DIR.glob("*.[y|ya]ml") if f.stem == case_name)
     assert case_file.exists()
 
