@@ -1,5 +1,7 @@
 # automated CI for testing napari plugins
 
+[![Status](https://github.com/tlambert03/napari-plugin-tests/actions/workflows/test.yml/badge.svg)](https://github.com/tlambert03/napari-plugin-tests/actions/workflows/test.yml)
+
 ## How this works
 
 To add a test case for a plugin, open a PR to add a new file
