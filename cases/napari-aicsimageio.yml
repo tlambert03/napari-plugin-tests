@@ -1,0 +1,8 @@
+deps: napari-aicsimageio
+plugins:
+  - name: aicsimageio-in-memory
+    hooks:
+      - napari_get_reader
+  - name: aicsimageio-out-of-memory
+    hooks:
+      - napari_get_reader
