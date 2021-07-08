@@ -1,0 +1,7 @@
+deps: napari_pyclesperanto_assistant
+plugins:
+  - name: clEsperanto
+    hooks:
+      - napari_provide_sample_data
+      - napari_experimental_provide_dock_widget
+      - napari_experimental_provide_function
