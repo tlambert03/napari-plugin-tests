@@ -10,11 +10,9 @@ def main(cases: Sequence[str] = ()):
     completed = []
     for case in TestSession.from_dir("cases").cases:
         if cases and case.name not in cases:
-            print(f"{case.name} not in {cases}.  Skipping.")
             continue
         try:
             text = _toxbase + "\n" + case.toxenv()
-            print(text)
             Path("tox.ini").write_text(text)
             completed.append(run(["tox", "-v", "-e", case.name]))
         finally:
