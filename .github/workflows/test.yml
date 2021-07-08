@@ -38,7 +38,11 @@ jobs:
       matrix:
         platform: [ubuntu-latest]
         python-version: [3.8, 3.9]
-        plugin: [napari-aicsimageio, napari-omero] # add each case in cases
+        plugin: # TODO: figure out how populate this from cases folder
+          - napari-aicsimageio
+          - napari-omero
+          - cellpose-napari
+          - napari-pyclesperanto-assistant
         include:
           # if it needs conda (has a conda_deps entry), add it here like this
           - plugin: napari-omero

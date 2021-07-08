@@ -4,10 +4,11 @@
 
 ## How this works
 
-To add a test case for a plugin, open a PR to add a new file
-to the [`cases`](cases) directory.  Here's an example test case, for
-`napari-omero`, which has a somewhat complicated installation,
-involving conda dependencies and non-default channels.
+To add a test case for a plugin, open a PR to add a new file to the
+[`cases`](cases) directory, then add your plugin to the github actions matrix.  
+
+Here's an example test case, for `napari-omero`, which has a somewhat
+complicated installation, involving conda dependencies and non-default channels.
 
 ```yaml
 # cases/napari-omero.yml
@@ -36,7 +37,7 @@ deps =
 ```
 
 and, using that environment, will run the tests in
-[`test_cases`](test_cases.py). Currently the default test will just ensure
-that the pacakge is discovered correctly, and that the expected
-hooks have been registered for each plugin namespace provided by
-the package, but this can expand with the TestCase schema.
+[`test_cases`](test_cases.py). Currently the default test will just ensure that
+the pacakge is discovered correctly, and that the expected hooks have been
+registered for each plugin namespace provided by the package, but this can
+expand with the TestCase schema.
