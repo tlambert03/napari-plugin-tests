@@ -22,7 +22,10 @@ jobs:
       matrix:
         platform: [ubuntu-latest]
         python-version: [3.7, 3.9]
-        toxenv: [napari-aicsimageio, napari-omero]  # env for each plugin in tox.ini
+        toxenv: [napari-aicsimageio]  # env for each plugin in tox.ini
+        include:
+          - toxenv: napari-omero
+            use-conda: 1
 
     steps:
     - uses: actions/checkout@v2
