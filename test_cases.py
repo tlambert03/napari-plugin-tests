@@ -1,13 +1,12 @@
 import os
 from pathlib import Path
-from typing import final
 from napari.plugins._plugin_manager import NapariPluginManager
 from napari._qt.widgets.qt_viewer_dock_widget import QDockWidget
 from napari import Viewer
 
 import pytest
 
-from case import TestCase
+from case import TestCase as TC
 
 
 @pytest.fixture
@@ -39,18 +38,19 @@ def test_case():
     case_file = next(f for f in CASE_DIR.glob("*.[y|ya]ml") if f.stem == case_name)
     assert case_file.exists()
 
-    return TestCase.from_file(case_file)
+    return TC.from_file(case_file)
 
 
 def test_discovery(test_case, pm):
     for plugin in test_case.plugins:
         if plugin.name not in pm.plugins:
-            raise AssertionError(f"plugin name {plugin.name} was not registered")
+            er = "\n".join(str(e) for e in pm.get_errors(plugin.name))
+            raise AssertionError(f"plugin name {plugin.name} was not registered:\n{er}")
         for hook in plugin.hooks:
             assert pm.provides(plugin.name, hook)
 
 
-def test_dockwidget_added(test_case: TestCase, pm: NapariPluginManager, qtbot):
+def test_dockwidget_added(test_case: TC, pm: NapariPluginManager, qtbot):
     for plugin in test_case.plugins:
         if plugin.name in pm._dock_widgets:
             for widget_name in pm._dock_widgets[plugin.name]:
