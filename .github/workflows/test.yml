@@ -70,9 +70,18 @@ jobs:
       if: matrix.use-conda
       run: pip install tox-conda
 
-    - name: Test with tox
-      run: tox
+    - name: Test
+      uses: GabrielBB/xvfb-action@v1
+      with:
+        run: tox
       env:
         PLATFORM: ${{ matrix.platform }}
         TOXENV: ${{ matrix.toxenv }}
         PYVISTA_OFF_SCREEN: True
+
+    # - name: Test with tox
+    #   run: tox
+    #   env:
+    #     PLATFORM: ${{ matrix.platform }}
+    #     TOXENV: ${{ matrix.toxenv }}
+    #     PYVISTA_OFF_SCREEN: True
