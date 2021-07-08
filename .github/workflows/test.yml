@@ -72,9 +72,7 @@ jobs:
         run: pip install tox-conda
 
       - name: Test
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: python run.py
+        run: python run.py
         env:
           PLATFORM: ${{ matrix.platform }}
           TEST_CASE: ${{ matrix.plugin }}

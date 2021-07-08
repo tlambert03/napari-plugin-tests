@@ -1,13 +1,13 @@
 from pathlib import Path
-from subprocess import run
-from typing import Sequence
+from subprocess import run, CompletedProcess
+from typing import Sequence, List
 
 from case import TestSession
 
 
 def main(cases: Sequence[str] = ()):
     _toxbase = Path("tox.ini").read_text()
-    completed = []
+    completed: List[CompletedProcess] = []
     for case in TestSession.from_dir("cases").cases:
         if cases and case.name not in cases:
             continue
@@ -18,8 +18,7 @@ def main(cases: Sequence[str] = ()):
         finally:
             Path("tox.ini").write_text(_toxbase)
 
-    for c in completed:
-        print(c)
+    sys.exit(int(any(r.returncode for r in completed)))
 
 
 if __name__ == "__main__":
