@@ -34,7 +34,7 @@ deps =
 ```
 
 and, using that environment, will run the tests in
-[`test_cases`](test_cases.py). The default test will just ensure
+[`test_cases`](test_cases.py). Currently the default test will just ensure
 that the pacakge is discovered correctly, and that the expected
 hooks have been registered for each plugin namespace provided by
-the package.
+the package, but this can expand with the TestCase schema.
