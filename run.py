@@ -6,17 +6,19 @@ from case import TestSession
 
 
 def main(cases: Sequence[str] = ()):
-    _toxbase = Path("tox.ini").read_text()
+    tox_ini = Path(__file__).parent / "tox.ini"
+
+    _toxbase = tox_ini.read_text()
     completed: List[CompletedProcess] = []
     for case in TestSession.from_dir("cases").cases:
         if cases and case.name not in cases:
             continue
         try:
             text = _toxbase + "\n" + case.toxenv()
-            Path("tox.ini").write_text(text)
+            tox_ini.write_text(text)
             completed.append(run(["tox", "-v", "-e", case.name]))
         finally:
-            Path("tox.ini").write_text(_toxbase)
+            tox_ini.write_text(_toxbase)
 
     sys.exit(int(any(r.returncode for r in completed)))
 
