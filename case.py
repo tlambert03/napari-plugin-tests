@@ -10,10 +10,17 @@ def str2list(obj, field):
     return obj
 
 
+class _Config:
+    extra = "forbid"
+    validate_all = True
+
+
 class Plugin(BaseModel):
     name: str
-    hooks: List[str]
+    hooks: List[str] = Field(default_factory=list)
     _str2list = validator("hooks", pre=True, allow_reuse=True)(str2list)
+
+    Config = _Config
 
 
 class TestCase(BaseModel):
@@ -25,6 +32,8 @@ class TestCase(BaseModel):
     commands: List[str] = Field(default_factory=list)
 
     _str2list = validator("*", pre=True)(str2list)
+
+    Config = _Config
 
     def toxenv(self) -> str:
         from textwrap import indent
@@ -59,3 +68,19 @@ class TestSession(BaseModel):
 
         cases = [TestCase.from_file(c) for c in Path(path).glob("*.[ya|y]ml")]
         return cls(cases=cases)
+
+
+if __name__ == "__main__":
+    import sys
+    from textwrap import indent
+
+    CASE_DIR = Path(__file__).parent / "cases"
+    errors = []
+    for case_file in CASE_DIR.glob("*.[y|ya]ml"):
+        try:
+            case = TestCase.from_file(case_file)
+            print(f"✅ {case.name}")
+        except Exception as e:
+            print(f"❌ {case_file.stem}\n{indent(str(e), '   ')}")
+            errors.append(e)
+    sys.exit(int(any(errors)))

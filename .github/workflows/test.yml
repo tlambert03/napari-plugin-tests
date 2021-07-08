@@ -11,7 +11,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     runs-on: ${{ matrix.platform }}
     defaults:
       run:
@@ -70,6 +70,29 @@ jobs:
       - name: Install tox-conda
         if: matrix.use-conda
         run: pip install tox-conda
+
+      - name: Test
+        run: python run.py
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          TEST_CASE: ${{ matrix.plugin }}
+          PYVISTA_OFF_SCREEN: True
+
+  check_cases:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+
 
       - name: Test
         run: python run.py
